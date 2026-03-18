@@ -1,23 +1,18 @@
 import React from 'react';
-import { Target } from 'lucide-react';
 
-interface MissionCardProps {
-  title: string;
-  description: string;
-}
+interface Props { title: string; description: string; }
 
-const MissionCard: React.FC<MissionCardProps> = ({ title, description }) => (
-  <div className="group bg-white/60 p-6 rounded-2xl border border-white shadow-sm hover:shadow-md transition-all h-full flex flex-col justify-center">
-    <div className="flex items-center gap-4 mb-4">
-      <div className="p-3 bg-blue-800 rounded-2xl shadow-lg text-white shrink-0">
-        <Target size={24} />
-      </div>
-      <h3 className="font-extrabold text-xl text-slate-900 uppercase italic tracking-tight">
-        {title}
-      </h3>
-    </div>
-    <p className="text-sm text-gray-700 leading-relaxed italic font-medium">
-      {description}
+const MissionCard: React.FC<Props> = ({ description }) => (
+  <div className="relative border p-8"
+       style={{ borderColor: 'var(--border-hi)', background: 'var(--accent-dim)', zIndex: 1 }}>
+    <div className="absolute -top-px -left-px w-5 h-5 border-t-2 border-l-2" style={{ borderColor: 'var(--accent-bright)' }} />
+    <div className="absolute -bottom-px -right-px w-5 h-5 border-b-2 border-r-2" style={{ borderColor: 'var(--accent-bright)' }} />
+    <p className="font-mono text-xs tracking-widest uppercase mb-4" style={{ color: 'var(--accent-bright)' }}>
+      MISSION_STMT
+    </p>
+    <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', fontWeight: 600,
+                lineHeight: 1.7, color: 'var(--text)', fontStyle: 'italic' }}>
+      "{description}"
     </p>
   </div>
 );

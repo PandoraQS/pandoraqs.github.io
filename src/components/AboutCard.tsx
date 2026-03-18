@@ -1,28 +1,76 @@
 import React from 'react';
 import type { LucideIcon } from 'lucide-react';
 
-interface AboutCardProps {
+interface Props {
   icon: LucideIcon;
   title: string;
   subtitle?: string;
   details?: string;
   description: string;
+  index: string;
+  variant?: 'default' | 'wide' | 'tall' | 'accent';
 }
 
-const AboutCard: React.FC<AboutCardProps> = ({ icon: Icon, title, subtitle, details, description }) => (
-  <div className="group bg-white/60 p-6 rounded-2xl border border-white shadow-sm hover:shadow-md transition-all h-full flex flex-col">
-    <div className="flex items-center gap-4 mb-4">
-      <div className="p-3 bg-blue-800 rounded-2xl shadow-lg text-white">
-        <Icon size={24} />
+const AboutCard: React.FC<Props> = ({ icon: Icon, title, subtitle, details, description, index, variant = 'default' }) => {
+  const isAccent = variant === 'accent';
+
+  return (
+    <div className="group relative h-full flex flex-col transition-all duration-300"
+         style={{
+           border: '1px solid',
+           borderColor: isAccent ? 'var(--accent)' : 'var(--border)',
+           background: isAccent ? 'var(--accent-dim)' : 'var(--surface)',
+           padding: variant === 'tall' ? '2.5rem' : '1.75rem',
+           zIndex: 1,
+         }}
+         onMouseEnter={e => {
+           const el = e.currentTarget as HTMLElement;
+           el.style.borderColor = 'var(--accent-bright)';
+           if (!isAccent) el.style.background = 'var(--surface-hi)';
+           el.style.boxShadow = '0 0 24px rgba(124,58,237,0.12)';
+         }}
+         onMouseLeave={e => {
+           const el = e.currentTarget as HTMLElement;
+           el.style.borderColor = isAccent ? 'var(--accent)' : 'var(--border)';
+           if (!isAccent) el.style.background = 'var(--surface)';
+           el.style.boxShadow = 'none';
+         }}>
+
+      <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+           style={{ background: 'linear-gradient(90deg, var(--accent-bright), transparent)' }} />
+
+      <span className="absolute top-4 right-5 font-mono select-none pointer-events-none"
+            style={{
+              fontSize: variant === 'tall' ? '5rem' : '3.5rem',
+              fontWeight: 700,
+              lineHeight: 1,
+              color: isAccent ? 'rgba(157,101,255,0.2)' : 'rgba(124,58,237,0.08)',
+              letterSpacing: '-0.05em',
+            }}>
+        {index}
+      </span>
+
+      <div className="flex items-center gap-2 mb-4">
+        <div className="p-2 border shrink-0"
+             style={{ borderColor: 'var(--border-hi)', color: 'var(--accent-bright)', background: 'rgba(124,58,237,0.08)' }}>
+          <Icon size={15} />
+        </div>
+        <span className="font-mono text-xs tracking-widest uppercase" style={{ color: 'var(--accent-bright)' }}>
+          [{title}]
+        </span>
       </div>
-      <div>
-        <h3 className="font-extrabold text-xl text-slate-900">{title}</h3>
-        {subtitle && <p className="text-blue-900 font-bold text-sm">{subtitle}</p>}
-        {details && <p className="text-gray-500 text-xs italic">{details}</p>}
-      </div>
+
+      {subtitle && (
+        <p className="font-mono text-sm mb-1" style={{ color: 'var(--text)', fontWeight: 500 }}>{subtitle}</p>
+      )}
+      {details && (
+        <p className="font-mono text-xs mb-4" style={{ color: 'var(--text-muted)' }}>{details}</p>
+      )}
+      <p className="mt-auto" style={{ fontSize: '0.88rem', lineHeight: 1.8, color: 'var(--text-muted)', fontWeight: 400 }}>
+        {description}
+      </p>
     </div>
-    <p className="text-sm text-gray-700 leading-relaxed grow">{description}</p>
-  </div>
-);
+  );
+};
 
 export default AboutCard;

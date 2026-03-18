@@ -17,3 +17,7 @@ section {
   box-shadow: 0 0 20px rgba(30, 41, 59, 0.2);
   border-color: #1e293b;
 }
+
+.font-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
