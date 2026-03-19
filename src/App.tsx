@@ -85,7 +85,7 @@ const QuoteStrip = ({ text, author }: { text: string; author: string }) => (
 );
 
 const AboutGrid = () => (
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '12px' }}>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '16px' }}>
     <div style={{ gridColumn: '1 / 6', gridRow: '1 / 3' }}>
       <AboutCard index="01" icon={GraduationCap} title="Education"
         subtitle="MSc Computer Engineering" details="Aarhus University · 2024 — 2026"
@@ -116,7 +116,7 @@ const ProjectsGrid = ({ projects }: { projects: Project[] }) => {
 
   if (isOdd) {
     return (
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
         <div style={{ gridColumn: '1 / 3' }}>
           <ProjectCard project={projects[0]} index={1} featured />
         </div>
@@ -127,7 +127,7 @@ const ProjectsGrid = ({ projects }: { projects: Project[] }) => {
     );
   }
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
       {projects.map((p, i) => (
         <ProjectCard key={i} project={p} index={i + 1} />
       ))}

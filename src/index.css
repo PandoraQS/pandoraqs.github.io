@@ -10,8 +10,8 @@
   --accent-bright: #9d65ff;
   --accent-dim:  rgba(124,58,237,0.12);
   --text:        #f0eeff;
-  --text-muted:  #8b85a8;
-  --text-dim:    #2e2a45;
+  --text-muted:  #c4bedd;
+  --text-dim:    #6b6488;
   --font-display: 'Syne', sans-serif;
   --font-mono:    'JetBrains Mono', monospace;
 }

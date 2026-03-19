@@ -11,62 +11,46 @@ const LinkedinIcon = () => (
   </svg>
 );
 
-interface HeroProps {
-  onTerminalSwitch: () => void;
-}
+interface HeroProps { onTerminalSwitch: () => void; }
 
 export const Hero = ({ onTerminalSwitch }: HeroProps) => (
   <section className="relative min-h-screen flex flex-col justify-center overflow-hidden"
            style={{ zIndex: 1 }}>
-    <div style={{ maxWidth: '1100px', margin: '0 auto', width: '100%', padding: '0 2rem' }}>
-      <div className="font-mono text-xs mb-10 animate-fade-in"
-           style={{ color: 'var(--text-dim)', letterSpacing: '0.15em' }}>
-        56.1629° N&nbsp;&nbsp;10.2039° E&nbsp;&nbsp;/&nbsp;&nbsp;AARHUS, DK
-      </div>
-      <div className="flex flex-row items-center gap-12 lg:gap-20">
-        <div className="flex-1 min-w-0">
+    <div style={{ maxWidth: '1100px', margin: '0 auto', width: '100%', padding: '0 clamp(1rem, 4vw, 2rem)' }}>
 
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-8 border animate-fade-up"
+      <div className="font-mono text-xs mb-8 animate-fade-in"
+           style={{ color: 'var(--text-dim)', letterSpacing: '0.12em' }}>
+        56.1629° N · 10.2039° E · AARHUS, DK
+      </div>
+
+      <div className="flex flex-col lg:flex-row lg:items-center gap-10 lg:gap-20">
+        <div className="flex-1 min-w-0">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-7 border animate-fade-up"
                style={{ borderColor: 'var(--border-hi)', background: 'var(--accent-dim)' }}>
             <span className="w-1.5 h-1.5 rounded-full"
                   style={{ background: 'var(--accent-bright)', animation: 'pulseDot 2s ease infinite' }} />
-            <span className="font-mono text-xs tracking-widest uppercase"
-                  style={{ color: 'var(--accent-bright)' }}>
+            <span className="font-mono text-xs tracking-widest uppercase" style={{ color: 'var(--accent-bright)' }}>
               Available · MSc 2026
             </span>
           </div>
-
           <div className="animate-fade-up delay-100">
             <h1 style={{
               fontFamily: "'Orbitron', var(--font-display)",
-              fontSize: 'clamp(2rem, 5vw, 4.8rem)',
-              fontWeight: 500,
-              lineHeight: 1.05,
-              letterSpacing: '0.06em',
-              color: 'var(--text)',
-            }}>
-              SIMONE
-            </h1>
+              fontSize: 'clamp(1.8rem, 7vw, 4.8rem)',
+              fontWeight: 500, lineHeight: 1.05, letterSpacing: '0.06em', color: 'var(--text)',
+            }}>SIMONE</h1>
             <h1 style={{
               fontFamily: "'Orbitron', var(--font-display)",
-              fontSize: 'clamp(2rem, 5vw, 4.8rem)',
-              fontWeight: 600,
-              lineHeight: 1.05,
-              letterSpacing: '0.06em',
-              color: 'var(--accent-bright)',
-              textShadow: '0 0 30px rgba(157,101,255,0.5)',
-            }}>
-              MICALIZZI
-            </h1>
+              fontSize: 'clamp(1.8rem, 7vw, 4.8rem)',
+              fontWeight: 600, lineHeight: 1.05, letterSpacing: '0.06em',
+              color: 'var(--accent-bright)', textShadow: '0 0 30px rgba(157,101,255,0.5)',
+            }}>MICALIZZI</h1>
           </div>
-
-          <div className="h-line mt-6 mb-6 animate-fade-in delay-200" style={{ maxWidth: '380px' }} />
-
-          <div className="flex flex-col sm:flex-row gap-8 sm:gap-14 animate-fade-up delay-300">
+          <div className="h-line mt-5 mb-5 animate-fade-in delay-200" style={{ maxWidth: '320px' }} />
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-12 animate-fade-up delay-300">
             <div>
-              <p className="font-mono text-xs tracking-widest uppercase mb-2"
-                 style={{ color: 'var(--accent-bright)' }}>ROLE</p>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', fontWeight: 700, color: 'var(--text)' }}>
+              <p className="font-mono text-xs tracking-widest uppercase mb-1" style={{ color: 'var(--accent-bright)' }}>ROLE</p>
+              <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1rem, 3vw, 1.2rem)', fontWeight: 700, color: 'var(--text)' }}>
                 Software Engineer
               </p>
               <p className="font-mono text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
@@ -74,90 +58,53 @@ export const Hero = ({ onTerminalSwitch }: HeroProps) => (
               </p>
             </div>
             <div style={{ maxWidth: '340px' }}>
-              <p className="font-mono text-xs tracking-widest uppercase mb-2"
-                 style={{ color: 'var(--accent-bright)' }}>FOCUS</p>
+              <p className="font-mono text-xs tracking-widest uppercase mb-1" style={{ color: 'var(--accent-bright)' }}>FOCUS</p>
               <p style={{ fontSize: '0.9rem', lineHeight: 1.8, color: 'var(--text-muted)' }}>
-                Distributed systems, ML pipelines, and high-performance
-                architectures. Bridging backend engineering with
-                intelligent data processing.
+                Distributed systems, ML pipelines, and high-performance architectures.
+                Bridging backend engineering with intelligent data processing.
               </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-3 mt-8 animate-fade-up delay-400">
+          <div className="flex flex-wrap gap-2 mt-7 animate-fade-up delay-400">
             {[
               { href: 'https://github.com/PandoraQS', label: 'GitHub', icon: <GithubIcon />, blank: true },
               { href: 'https://linkedin.com/in/simone-micalizzi', label: 'LinkedIn', icon: <LinkedinIcon />, blank: true },
               { href: 'mailto:simonemicalizzi@pm.me', label: 'Contact', icon: <Mail size={14} /> },
             ].map(({ href, label, icon, blank }) => (
-              <a key={label} href={href}
-                 target={blank ? '_blank' : undefined} rel="noreferrer"
-                 className="flex items-center gap-2 font-mono text-sm tracking-wider uppercase px-4 py-2.5 border transition-all duration-200"
+              <a key={label} href={href} target={blank ? '_blank' : undefined} rel="noreferrer"
+                 className="flex items-center gap-2 font-mono text-xs tracking-wider uppercase px-4 py-2.5 border transition-all duration-200"
                  style={{ borderColor: 'var(--border-hi)', color: 'var(--text-muted)', background: 'var(--surface)' }}
-                 onMouseEnter={e => {
-                   const el = e.currentTarget as HTMLElement;
-                   el.style.borderColor = 'var(--accent-bright)';
-                   el.style.color = 'var(--accent-bright)';
-                   el.style.background = 'var(--accent-dim)';
-                   el.style.boxShadow = '0 0 16px rgba(124,58,237,0.2)';
-                 }}
-                 onMouseLeave={e => {
-                   const el = e.currentTarget as HTMLElement;
-                   el.style.borderColor = 'var(--border-hi)';
-                   el.style.color = 'var(--text-muted)';
-                   el.style.background = 'var(--surface)';
-                   el.style.boxShadow = 'none';
-                 }}>
+                 onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'var(--accent-bright)'; el.style.color = 'var(--accent-bright)'; el.style.background = 'var(--accent-dim)'; }}
+                 onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'var(--border-hi)'; el.style.color = 'var(--text-muted)'; el.style.background = 'var(--surface)'; }}>
                 {icon} {label}
               </a>
             ))}
           </div>
 
-          <div className="mt-10 animate-fade-up delay-500">
-            <div className="font-mono text-xs tracking-widest uppercase mb-3"
-                 style={{ color: 'var(--text-dim)' }}>
+          <div className="mt-8 animate-fade-up delay-500">
+            <p className="font-mono text-xs tracking-widest uppercase mb-2" style={{ color: 'var(--text-dim)' }}>
               // ALTERNATIVE_INTERFACE
-            </div>
-            <button
-              onClick={onTerminalSwitch}
-              className="group flex items-center gap-3 border-2 px-6 py-3 transition-all duration-200 font-mono text-sm tracking-widest uppercase"
-              style={{
-                borderColor: 'var(--accent)',
-                color: 'var(--accent-bright)',
-                background: 'transparent',
-              }}
-              onMouseEnter={e => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.background = 'var(--accent)';
-                el.style.color = '#fff';
-                el.style.boxShadow = '0 0 32px rgba(124,58,237,0.5), inset 0 0 20px rgba(255,255,255,0.05)';
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.background = 'transparent';
-                el.style.color = 'var(--accent-bright)';
-                el.style.boxShadow = 'none';
-              }}
-            >
+            </p>
+            <button onClick={onTerminalSwitch}
+              className="group flex items-center gap-3 border-2 px-5 py-3 transition-all duration-200 font-mono text-sm tracking-widest uppercase"
+              style={{ borderColor: 'var(--accent)', color: 'var(--accent-bright)', background: 'transparent' }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'var(--accent)'; el.style.color = '#fff'; el.style.boxShadow = '0 0 32px rgba(124,58,237,0.5)'; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'transparent'; el.style.color = 'var(--accent-bright)'; el.style.boxShadow = 'none'; }}>
               <Terminal size={15} />
-              <span>Launch Terminal Mode</span>
-              <span className="font-mono text-xs opacity-50 group-hover:opacity-100 transition-opacity"
-                    style={{ animation: 'pulseDot 1.5s ease infinite' }}>
-                _
-              </span>
+              Launch Terminal Mode
+              <span style={{ animation: 'pulseDot 1.5s ease infinite' }}>_</span>
             </button>
-            <p className="font-mono text-xs mt-2" style={{ color: 'var(--text-dim)' }}>
-              Interactive CLI portfolio — type commands to explore
+            <p className="font-mono text-xs mt-1.5" style={{ color: 'var(--text-dim)' }}>
+              Interactive CLI — type commands to explore
             </p>
           </div>
         </div>
 
         <div className="hidden lg:block shrink-0 animate-fade-in delay-500">
-          <div className="relative" style={{ width: '260px', height: '320px' }}>
-            <div className="absolute -top-3 -left-3 w-6 h-6 border-t-2 border-l-2"
-                 style={{ borderColor: 'var(--accent-bright)' }} />
-            <div className="absolute -bottom-3 -right-3 w-6 h-6 border-b-2 border-r-2"
-                 style={{ borderColor: 'var(--accent-bright)' }} />
+          <div className="relative" style={{ width: '240px', height: '300px' }}>
+            <div className="absolute -top-3 -left-3 w-6 h-6 border-t-2 border-l-2" style={{ borderColor: 'var(--accent-bright)' }} />
+            <div className="absolute -bottom-3 -right-3 w-6 h-6 border-b-2 border-r-2" style={{ borderColor: 'var(--accent-bright)' }} />
             <img src="/assets/profile.jpg" alt="Simone Micalizzi"
                  className="w-full h-full object-cover object-top"
                  style={{ filter: 'grayscale(40%) contrast(1.1) brightness(0.85)' }} />
@@ -178,11 +125,11 @@ export const Hero = ({ onTerminalSwitch }: HeroProps) => (
     </div>
 
     <a href="#about"
-       className="absolute bottom-10 left-8 flex items-center gap-2 font-mono text-xs tracking-widest uppercase animate-fade-in delay-700"
+       className="absolute bottom-8 left-4 md:left-8 flex items-center gap-2 font-mono text-xs tracking-widest uppercase animate-fade-in delay-700"
        style={{ color: 'var(--text-dim)', zIndex: 1 }}>
       <ArrowDown size={12} /> scroll
     </a>
-    <div className="absolute bottom-10 right-8 font-mono text-xs"
+    <div className="absolute bottom-8 right-4 md:right-8 font-mono text-xs hidden sm:block"
          style={{ color: 'var(--text-dim)', zIndex: 1, letterSpacing: '0.15em' }}>
       SEC — 00
     </div>
@@ -194,19 +141,20 @@ export const Quotes = {
 };
 
 export const CTA = () => (
-  <div className="relative mt-28 border"
-       style={{ borderColor: 'var(--border-hi)', background: 'var(--surface-hi)', zIndex: 1, boxShadow: '0 0 40px rgba(124,58,237,0.08)' }}>
-    <div className="absolute -top-px -left-px w-7 h-7 border-t-2 border-l-2" style={{ borderColor: 'var(--accent-bright)' }} />
-    <div className="absolute -bottom-px -right-px w-7 h-7 border-b-2 border-r-2" style={{ borderColor: 'var(--accent-bright)' }} />
-    <div className="px-10 py-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+  <div className="relative mt-16 md:mt-28 border"
+       style={{ borderColor: 'var(--border-hi)', background: 'var(--surface-hi)', zIndex: 1 }}>
+    <div className="absolute -top-px -left-px w-6 h-6 border-t-2 border-l-2" style={{ borderColor: 'var(--accent-bright)' }} />
+    <div className="absolute -bottom-px -right-px w-6 h-6 border-b-2 border-r-2" style={{ borderColor: 'var(--accent-bright)' }} />
+    <div className="px-6 md:px-10 py-10 md:py-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
       <div>
         <p className="font-mono text-xs tracking-widest uppercase mb-3" style={{ color: 'var(--accent-bright)' }}>NEXT_STEP</p>
-        <p style={{ fontFamily: "'Orbitron', var(--font-display)", fontSize: '1.5rem', fontWeight: 500, color: 'var(--text)', lineHeight: 1.3, letterSpacing: '0.04em' }}>
+        <p style={{ fontFamily: "'Orbitron', var(--font-display)", fontSize: 'clamp(1.1rem, 3vw, 1.5rem)',
+                    fontWeight: 500, color: 'var(--text)', lineHeight: 1.3, letterSpacing: '0.03em' }}>
           Ready to build<br />something remarkable?
         </p>
       </div>
       <a href="mailto:simonemicalizzi@pm.me"
-         className="flex items-center gap-2 font-mono text-sm tracking-widest uppercase px-6 py-3 border-2 transition-all duration-200"
+         className="flex items-center gap-2 font-mono text-sm tracking-widest uppercase px-5 py-3 border-2 transition-all duration-200 whitespace-nowrap"
          style={{ borderColor: 'var(--accent)', color: 'var(--accent-bright)', background: 'transparent' }}
          onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'var(--accent)'; el.style.color = '#fff'; el.style.boxShadow = '0 0 24px rgba(124,58,237,0.4)'; }}
          onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'transparent'; el.style.color = 'var(--accent-bright)'; el.style.boxShadow = 'none'; }}>
@@ -217,10 +165,10 @@ export const CTA = () => (
 );
 
 export const Footer = () => (
-  <footer className="relative py-8 flex flex-col md:flex-row items-center justify-between gap-3"
+  <footer className="relative py-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-center"
           style={{ borderTop: '1px solid var(--border)', zIndex: 1,
-                   maxWidth: '1100px', margin: '0 auto', padding: '2rem' }}>
+                   maxWidth: '1100px', margin: '0 auto', padding: '1.5rem clamp(1rem, 4vw, 2rem)' }}>
     <span className="font-mono text-xs tracking-widest" style={{ color: 'var(--text-dim)' }}>© 2026 SIMONE MICALIZZI</span>
-    <span className="font-mono text-xs tracking-widest" style={{ color: 'var(--text-dim)' }}>56.1629° N · 10.2039° E · AARHUS UNIVERSITY</span>
+    <span className="font-mono text-xs tracking-widest" style={{ color: 'var(--text-dim)' }}>56.1629° N · 10.2039° E</span>
   </footer>
 );

@@ -8,74 +8,64 @@ const GithubIcon = () => (
   </svg>
 );
 
-interface Props {
-  project: Project;
-  index: number;
-  featured?: boolean;
-}
+interface Props { project: Project; index: number; featured?: boolean; }
 
 const ProjectCard: React.FC<Props> = ({ project, index, featured = false }) => (
   <div className="group relative border transition-all duration-300 h-full"
-       style={{ borderColor: 'var(--border)', background: 'var(--surface)', zIndex: 1 }}
-       onMouseEnter={e => {
-         const el = e.currentTarget as HTMLElement;
-         el.style.borderColor = 'var(--border-hi)';
-         el.style.boxShadow = '0 0 30px rgba(124,58,237,0.12)';
-       }}
-       onMouseLeave={e => {
-         const el = e.currentTarget as HTMLElement;
-         el.style.borderColor = 'var(--border)';
-         el.style.boxShadow = 'none';
-       }}>
+    style={{ borderColor: 'var(--border)', background: 'var(--surface)', zIndex: 1 }}
+    onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'var(--border-hi)'; el.style.boxShadow = '0 0 30px rgba(124,58,237,0.12)'; }}
+    onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'var(--border)'; el.style.boxShadow = 'none'; }}>
 
     <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-         style={{ background: 'linear-gradient(90deg, var(--accent), transparent)' }} />
+      style={{ background: 'linear-gradient(90deg, var(--accent), transparent)' }} />
 
     {featured ? (
       <div className="flex flex-col lg:flex-row h-full">
         <div className="relative lg:w-80 xl:w-96 shrink-0 overflow-hidden"
-             style={{ minHeight: '260px', borderRight: '1px solid var(--border)' }}>
+          style={{ minHeight: '220px', borderBottom: '1px solid var(--border)' }}
+        >
           <img src={project.image} alt={project.title}
-               className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-               style={{ minHeight: '260px', filter: 'grayscale(20%) contrast(1.05) brightness(0.8)' }} />
+            className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+            style={{ minHeight: '220px', filter: 'grayscale(20%) contrast(1.05) brightness(0.8)' }} />
           <div className="absolute inset-0 pointer-events-none"
-               style={{ background: 'linear-gradient(135deg, rgba(124,58,237,0.14) 0%, rgba(9,9,15,0.5) 100%)' }} />
+            style={{ background: 'linear-gradient(135deg, rgba(124,58,237,0.14) 0%, rgba(9,9,15,0.5) 100%)' }} />
           <div className="absolute inset-0 pointer-events-none"
-               style={{ background: 'repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.1) 2px,rgba(0,0,0,0.1) 4px)' }} />
+            style={{ background: 'repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.1) 2px,rgba(0,0,0,0.1) 4px)' }} />
           <div className="absolute top-3 left-3 font-mono text-xs px-2 py-1"
-               style={{ background: 'rgba(9,9,15,0.88)', color: 'var(--accent-bright)', border: '1px solid var(--border-hi)' }}>
+            style={{ background: 'rgba(9,9,15,0.88)', color: 'var(--accent-bright)', border: '1px solid var(--border-hi)' }}>
             P_{String(index).padStart(2, '0')} · FEATURED
           </div>
         </div>
-
-        <div className="flex flex-col justify-between p-8 flex-1">
+        <div className="flex flex-col justify-between p-6 lg:p-8 flex-1">
           <div>
             <p className="font-mono text-xs tracking-widest uppercase mb-3" style={{ color: 'var(--text-dim)' }}>
               PROJECT · {String(index).padStart(2, '0')}
             </p>
-            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 700,
-                         color: 'var(--text)', letterSpacing: '-0.02em', marginBottom: '0.9rem' }}>
+            <h3 style={{
+              fontFamily: 'var(--font-display)', fontSize: 'clamp(1.1rem, 3vw, 1.5rem)',
+              fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em', marginBottom: '0.8rem'
+            }}>
               {project.title}
             </h3>
-            <p style={{ fontSize: '0.92rem', lineHeight: 1.8, color: 'var(--text-muted)', maxWidth: '55ch' }}>
+            <p style={{ fontSize: '0.9rem', lineHeight: 1.8, color: 'var(--text-muted)' }}>
               {project.desc}
             </p>
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-4 mt-7 pt-6"
-               style={{ borderTop: '1px solid var(--border)' }}>
-            <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-3 mt-6 pt-5"
+            style={{ borderTop: '1px solid var(--border)' }}>
+            <div className="flex flex-wrap gap-1.5">
               {project.tags.map(t => (
-                <span key={t} className="font-mono text-xs px-2.5 py-1 tracking-wider uppercase"
-                      style={{ border: '1px solid var(--border)', color: 'var(--text-muted)', background: 'var(--surface-hi)' }}>
+                <span key={t} className="font-mono text-[10px] px-2 py-0.5 tracking-wider uppercase"
+                  style={{ border: '1px solid var(--border)', color: 'var(--text-muted)', background: 'var(--surface-hi)' }}>
                   {t}
                 </span>
               ))}
             </div>
             <a href={project.repo} target="_blank" rel="noreferrer"
-               className="flex items-center gap-1.5 font-mono text-xs tracking-widest uppercase transition-colors duration-200"
-               style={{ color: 'var(--text-muted)' }}
-               onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--accent-bright)')}
-               onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-muted)')}>
+              className="flex items-center gap-1.5 font-mono text-xs tracking-widest uppercase transition-colors duration-200"
+              style={{ color: 'var(--text-muted)' }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--accent-bright)')}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-muted)')}>
               <GithubIcon /> View Repo <ExternalLink size={10} />
             </a>
           </div>
@@ -84,48 +74,49 @@ const ProjectCard: React.FC<Props> = ({ project, index, featured = false }) => (
     ) : (
       <div className="flex flex-col h-full">
         <div className="relative overflow-hidden shrink-0"
-             style={{ height: '180px', borderBottom: '1px solid var(--border)' }}>
+          style={{ height: 'clamp(140px, 20vw, 180px)', borderBottom: '1px solid var(--border)' }}>
           <img src={project.image} alt={project.title}
-               className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-               style={{ filter: 'grayscale(25%) contrast(1.05) brightness(0.75)' }} />
+            className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+            style={{ filter: 'grayscale(25%) contrast(1.05) brightness(0.75)' }} />
           <div className="absolute inset-0 pointer-events-none"
-               style={{ background: 'linear-gradient(160deg, rgba(124,58,237,0.12) 0%, rgba(9,9,15,0.55) 100%)' }} />
+            style={{ background: 'linear-gradient(160deg, rgba(124,58,237,0.12) 0%, rgba(9,9,15,0.55) 100%)' }} />
           <div className="absolute inset-0 pointer-events-none"
-               style={{ background: 'repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.1) 2px,rgba(0,0,0,0.1) 4px)' }} />
+            style={{ background: 'repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.1) 2px,rgba(0,0,0,0.1) 4px)' }} />
           <div className="absolute top-3 left-3 font-mono text-xs px-2 py-1"
-               style={{ background: 'rgba(9,9,15,0.88)', color: 'var(--accent-bright)', border: '1px solid var(--border-hi)' }}>
+            style={{ background: 'rgba(9,9,15,0.88)', color: 'var(--accent-bright)', border: '1px solid var(--border-hi)' }}>
             P_{String(index).padStart(2, '0')}
           </div>
         </div>
-        <div className="flex flex-col justify-between p-6 flex-1">
+        <div className="flex flex-col justify-between p-5 flex-1">
           <div>
             <p className="font-mono text-xs tracking-widest uppercase mb-2" style={{ color: 'var(--text-dim)' }}>
               PROJECT · {String(index).padStart(2, '0')}
             </p>
-            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700,
-                         color: 'var(--text)', letterSpacing: '-0.01em', marginBottom: '0.65rem' }}>
+            <h3 style={{
+              fontFamily: 'var(--font-display)', fontSize: 'clamp(0.95rem, 2.5vw, 1.1rem)',
+              fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.01em', marginBottom: '0.6rem'
+            }}>
               {project.title}
             </h3>
             <p style={{ fontSize: '0.85rem', lineHeight: 1.75, color: 'var(--text-muted)' }}>
               {project.desc}
             </p>
           </div>
-
-          <div className="flex flex-wrap items-center justify-between gap-3 mt-6 pt-5"
-               style={{ borderTop: '1px solid var(--border)' }}>
+          <div className="flex flex-wrap items-center justify-between gap-3 mt-5 pt-4"
+            style={{ borderTop: '1px solid var(--border)' }}>
             <div className="flex flex-wrap gap-1.5">
               {project.tags.map(t => (
                 <span key={t} className="font-mono text-[10px] px-2 py-0.5 tracking-wider uppercase"
-                      style={{ border: '1px solid var(--border)', color: 'var(--text-muted)', background: 'var(--surface-hi)' }}>
+                  style={{ border: '1px solid var(--border)', color: 'var(--text-muted)', background: 'var(--surface-hi)' }}>
                   {t}
                 </span>
               ))}
             </div>
             <a href={project.repo} target="_blank" rel="noreferrer"
-               className="flex items-center gap-1.5 font-mono text-xs tracking-widest uppercase transition-colors duration-200"
-               style={{ color: 'var(--text-muted)' }}
-               onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--accent-bright)')}
-               onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-muted)')}>
+              className="flex items-center gap-1.5 font-mono text-xs tracking-widest uppercase transition-colors duration-200"
+              style={{ color: 'var(--text-muted)' }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = 'var(--accent-bright)')}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'var(--text-muted)')}>
               <GithubIcon /> Repo <ExternalLink size={9} />
             </a>
           </div>

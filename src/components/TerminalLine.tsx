@@ -11,15 +11,17 @@ const colorMap: Record<TLine['type'], string> = {
   image:   '',
 };
 
+const isDecorativeLine = (content: string) =>
+  content.includes('┌') || content.includes('└') || content.includes('│') ||
+  content.includes('──') || content.startsWith('  ┌') || content.startsWith('  └');
+
 export default function TerminalLine({ line }: { line: TLine }) {
   const cls = colorMap[line.type];
 
   if (line.type === 'ascii') {
     return (
-      <pre
-        className="text-green-400 font-mono whitespace-pre overflow-hidden"
-        style={{ fontSize: '7px', lineHeight: '1.15' }}
-      >
+      <pre className="text-green-400 font-mono whitespace-pre overflow-hidden"
+           style={{ fontSize: '7px', lineHeight: '1.15' }}>
         {line.content}
       </pre>
     );
@@ -28,12 +30,8 @@ export default function TerminalLine({ line }: { line: TLine }) {
   if (line.type === 'image') {
     return (
       <div className="my-1">
-        <AsciiImage
-          src={line.content}
-          width={90}
-          className="text-green-500"
-          style={{ fontSize: '5.5px', lineHeight: '1' }}
-        />
+        <AsciiImage src={line.content} width={90} className="text-green-500"
+                    style={{ fontSize: '5.5px', lineHeight: '1' }} />
       </div>
     );
   }
@@ -42,7 +40,7 @@ export default function TerminalLine({ line }: { line: TLine }) {
     const match = line.content.match(/https?:\/\/[^\s]+|mailto:[^\s]+/);
     if (match) {
       return (
-        <div className={`font-mono text-sm ${cls}`}>
+        <div className={`font-mono text-sm ${cls} break-all`}>
           <a href={match[0]} target="_blank" rel="noreferrer" className="hover:underline">
             {line.content}
           </a>
@@ -51,8 +49,18 @@ export default function TerminalLine({ line }: { line: TLine }) {
     }
   }
 
+  if (isDecorativeLine(line.content)) {
+    return (
+      <div className={`font-mono text-sm leading-relaxed overflow-hidden ${cls}`}
+           style={{ whiteSpace: 'pre', textOverflow: 'clip' }}>
+        {line.content}
+      </div>
+    );
+  }
+
   return (
-    <div className={`font-mono text-sm leading-relaxed ${cls}`}>
+    <div className={`font-mono text-sm leading-relaxed wrap-break-word ${cls}`}
+         style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>
       {line.content}
     </div>
   );
