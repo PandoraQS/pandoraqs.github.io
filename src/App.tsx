@@ -5,6 +5,8 @@ import Footer from './components/Footer';
 import AboutCard from './components/AboutCard';
 import MissionCard from './components/MissionCard';
 import ProjectCard from './components/ProjectCard';
+import GoalCard from './components/GoalCard';
+import CrowdFragment from './components/CrowdFragment';
 import Terminal from './components/Terminal';
 import ModeToggle from './components/ModeToggle';
 import CRTBackground from './components/CRTBackground';
@@ -24,7 +26,7 @@ function PageWidth({ children }: { children: React.ReactNode }) {
 
 function Section({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
   return (
-    <section id={id} style={{ zIndex: 1, padding: '7rem 2rem', position: 'relative' }}>
+    <section id={id} style={{ zIndex: 1, padding: 'clamp(3rem, 8vw, 7rem) clamp(1rem, 4vw, 2rem)', position: 'relative' }}>
       <PageWidth>
         <div className="flex items-center gap-5 mb-16">
           <span className="font-mono text-sm tracking-widest uppercase" style={{ color: 'var(--accent-bright)' }}>
@@ -52,34 +54,96 @@ function QuoteStrip({ text, author }: { text: string; author: string }) {
   );
 }
 
+function FrescoStrip() {
+  return (
+    <section style={{ zIndex: 1, position: 'relative', padding: '0 clamp(1rem, 4vw, 2rem)', marginBottom: 'clamp(2rem, 5vw, 4rem)' }}>
+      <PageWidth>
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 items-start">
+
+          <div className="relative shrink-0 flex justify-center lg:block">
+            <div className="relative" style={{ width: 'min(160px, 40vw)', height: 'min(457px, 114vw)' }}>
+              <div className="absolute -top-2 -left-2 w-4 h-4 border-t-2 border-l-2" style={{ borderColor: 'var(--accent-bright)' }} />
+              <div className="absolute -bottom-2 -right-2 w-4 h-4 border-b-2 border-r-2" style={{ borderColor: 'var(--accent-bright)' }} />
+              <div
+                className="absolute -top-5 left-0 font-mono tracking-widest"
+                style={{ color: 'var(--text-dim)', letterSpacing: '0.18em', fontSize: '9px' }}
+              >
+                SUPPLICANTI · 1446
+              </div>
+              <div
+                className="absolute -bottom-5 right-0 font-mono tracking-widest"
+                style={{ color: 'var(--text-dim)', letterSpacing: '0.18em', fontSize: '9px' }}
+              >
+                FOLLA
+              </div>
+              <CrowdFragment className="w-full h-full" />
+              <div
+                className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-2 py-1"
+                style={{ background: 'rgba(9,9,15,0.7)', borderTop: '1px solid var(--border-hi)' }}
+              >
+                <span className="font-mono tracking-widest" style={{ color: 'var(--text-dim)', fontSize: '9px' }}>CROWD_FRAG</span>
+                <span className="font-mono tracking-widest" style={{ color: 'var(--accent-bright)', fontSize: '9px' }}>HALFTONE_MODE</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-1 flex flex-col gap-4 justify-center" style={{ paddingTop: '1rem' }}>
+            <div
+              className="font-mono text-xs tracking-widest uppercase"
+              style={{ color: 'var(--text-dim)', letterSpacing: '0.15em' }}
+            >
+              // TRIONFO DELLA MORTE · FRAGMENT II
+            </div>
+            <GoalCard />
+            <p className="font-mono text-xs" style={{ color: 'var(--text-dim)', lineHeight: 1.7 }}>
+              The supplicants in the fresco implore Death — the engineer implores the system.<br />
+              Both know the answer depends entirely on the architecture.
+            </p>
+          </div>
+
+        </div>
+      </PageWidth>
+    </section>
+  );
+}
+
 function AboutGrid() {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '16px' }}>
-      <div style={{ gridColumn: '1 / 6', gridRow: '1 / 3' }}>
+    <>
+      <div className="flex flex-col gap-4 md:hidden">
         <AboutCard {...ABOUT_CARDS[0]} />
-      </div>
-      <div style={{ gridColumn: '6 / 13', gridRow: '1 / 2' }}>
         <AboutCard {...ABOUT_CARDS[1]} />
-      </div>
-      <div style={{ gridColumn: '6 / 13', gridRow: '2 / 3' }}>
         <MissionCard description={SITE.mission} />
-      </div>
-      <div style={{ gridColumn: '1 / 7', gridRow: '3 / 4' }}>
         <AboutCard {...ABOUT_CARDS[2]} />
-      </div>
-      <div style={{ gridColumn: '7 / 13', gridRow: '3 / 4' }}>
         <AboutCard {...ABOUT_CARDS[3]} />
       </div>
-    </div>
+      <div className="hidden md:grid" style={{ gridTemplateColumns: 'repeat(12, 1fr)', gap: '16px' }}>
+        <div style={{ gridColumn: '1 / 6', gridRow: '1 / 3' }}>
+          <AboutCard {...ABOUT_CARDS[0]} />
+        </div>
+        <div style={{ gridColumn: '6 / 13', gridRow: '1 / 2' }}>
+          <AboutCard {...ABOUT_CARDS[1]} />
+        </div>
+        <div style={{ gridColumn: '6 / 13', gridRow: '2 / 3' }}>
+          <MissionCard description={SITE.mission} />
+        </div>
+        <div style={{ gridColumn: '1 / 7', gridRow: '3 / 4' }}>
+          <AboutCard {...ABOUT_CARDS[2]} />
+        </div>
+        <div style={{ gridColumn: '7 / 13', gridRow: '3 / 4' }}>
+          <AboutCard {...ABOUT_CARDS[3]} />
+        </div>
+      </div>
+    </>
   );
 }
 
 function ProjectsGrid({ projects }: { projects: Project[] }) {
   const isOdd = projects.length % 2 !== 0;
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {isOdd && (
-        <div style={{ gridColumn: '1 / 3' }}>
+        <div className="col-span-1 md:col-span-2">
           <ProjectCard project={projects[0]} index={1} featured />
         </div>
       )}
@@ -103,6 +167,8 @@ export default function App() {
         <div style={{ background: 'var(--bg)', minHeight: '100vh', position: 'relative' }}>
           <CRTBackground />
           <Hero onTerminalSwitch={() => setMode('terminal')} />
+
+          <FrescoStrip />
 
           <Section id="about" label="01 // ABOUT">
             <AboutGrid />

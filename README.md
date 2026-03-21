@@ -10,11 +10,13 @@ The portfolio has two modes, switchable at any time via the **GUI / TERM** toggl
 
 ### GUI mode
 
-A full visual portfolio with a cyberpunk dark aesthetic — animated CRT/WebGL background, Orbitron + Syne typography, and a responsive layout covering Hero, About, Projects, and a contact CTA.
+A full visual portfolio with a cyberpunk dark aesthetic — animated CRT/WebGL background, Orbitron + Syne typography, and a responsive layout covering Hero, Fresco Strip, About, Projects, and a contact CTA.
+
+The visual identity is built around **Trionfo della Morte** (1446, Palazzo Abbatellis, Palermo) — the medieval fresco is deconstructed into halftone canvas fragments scattered across the page, each section of the painting corresponding to a thematic section of the portfolio.
 
 ### Terminal mode
 
-A fully interactive CLI that runs in the browser. Type commands to explore the portfolio as if you were in a real shell:
+A fully interactive CLI that runs in the browser:
 
 ```bash
 pandoraqs@portfolio:~$ help        # list all commands
@@ -28,7 +30,7 @@ pandoraqs@portfolio:~$ quote       # random dev quote
 pandoraqs@portfolio:~$ gui         # switch back to visual mode
 ```
 
-Supports **↑↓ command history** and **TAB autocomplete**. On load, the terminal renders a WebGL-processed ASCII art version of the profile photo alongside the boot sequence and SIMONE MICALIZZI banner.
+Supports **↑↓ command history** and **TAB autocomplete**.
 
 ---
 
@@ -40,10 +42,25 @@ Supports **↑↓ command history** and **TAB autocomplete**. On load, the termi
 | Build | Vite |
 | Styling | Tailwind CSS v4 + CSS custom properties |
 | Fonts | Orbitron (display) · Syne (UI) · JetBrains Mono (mono) |
-| Background | WebGL2 — custom GLSL fragment shader (CRT scanlines + glitch) |
+| Background | WebGL2 — custom GLSL fragment shader (CRT scanlines + phosphor glow + glitch) |
+| Halftone engine | Canvas API — real-time pixel-to-dot conversion with per-dot animation |
 | ASCII art | Canvas API — real-time pixel-to-character image conversion |
 | Icons | Lucide React |
 | Deployment | GitHub Actions → GitHub Pages |
+
+---
+
+## Visual concept — Trionfo della Morte
+
+The site's visual identity is grounded in the **Trionfo della Morte** fresco (1446, anonymous Sicilian master, Palazzo Abbatellis, Palermo). The painting is progressively deconstructed across the page:
+
+| Fragment | Section | Component |
+| --- | --- | --- |
+| Horse + skeleton rider | Hero | `DeathRider.tsx` |
+| Supplicant crowd | Between Hero and About | `CrowdFragment.tsx` |
+| *(more planned)* | *(future sections)* | — |
+
+Each fragment is a live canvas with breathing dots, pulse radiale, glitch slice, and hover violet glow.
 
 ---
 
@@ -51,39 +68,26 @@ Supports **↑↓ command history** and **TAB autocomplete**. On load, the termi
 
 ### 1 — INTO-CPS Application
 
-Cross-platform desktop app built with **Electron + React** that modernizes co-simulation execution via the Maestro Engine. Features live graph rendering of simulation output and a fully automated CI/CD pipeline via GitHub Actions.
 **Stack:** React · TypeScript · Electron · GitHub Actions · Maestro Engine
 **Repo:** [INTO-CPS-Association/into-cps-application](https://github.com/INTO-CPS-Association/into-cps-application/)
 
----
-
 ### 2 — Crypto Arbitrage Stealth Engine
 
-High-frequency real-time ETL pipeline that monitors arbitrage opportunities across crypto exchanges. Uses persistent WebSocket connections to ingest live order book data, Redis for sub-millisecond state management, and Docker microservices for horizontal scaling.
 **Stack:** Python · Asyncio · Redis · Docker · WebSockets
 **Repo:** [PandoraQS/Crypto-Arbitrage-Stealth](https://github.com/PandoraQS/Crypto-Arbitrage-Stealth)
 
----
-
 ### 3 — Sentiment Alpha AI
 
-AI pipeline for real-time crypto market narrative tracking. Ingests financial news, runs **FinBERT** for sentiment scoring, correlates signals with live exchange spreads, and uses **Llama 3** for narrative summarization. Built as a Streamlit dashboard.
 **Stack:** NLP · PyTorch · Llama 3 · FinBERT · Streamlit
 **Repo:** [PandoraQS/News-Sentiment-Alpha](https://github.com/PandoraQS/News-Sentiment-Alpha)
 
----
-
 ### 4 — Behavioral Analytics Platform
 
-End-to-end data engineering project processing complex e-commerce clickstream patterns. Identifies user anomalies and risk signals through ETL pipelines built with Pandas and validated with Pydantic schemas, with SQL-based reporting.
 **Stack:** Data Engineering · Pandas · SQL · Pydantic · ETL
 **Repo:** [PandoraQS/ecommerce-behavior-analytics](https://github.com/PandoraQS/ecommerce-behavior-analytics)
 
----
-
 ### 5 — Aarhus Terrain Engine
 
-High-performance GIS web app mapping Aarhus's green infrastructure for flood risk analysis and urban water management. Built with **React + OpenLayers**, queries live OSM data via the Overpass API, and renders large geospatial datasets in the browser.
 **Stack:** React · TypeScript · OpenLayers · Vite · Overpass API
 **Repo:** [PandoraQS/terrain-aarhus-demo](https://github.com/PandoraQS/terrain-aarhus-demo/)
 
@@ -95,29 +99,43 @@ High-performance GIS web app mapping Aarhus's green infrastructure for flood ris
 src/
 ├── components/
 │   ├── AboutCard.tsx        # About section cards
-│   ├── AsciiImage.tsx       # Canvas-based image → ASCII converter
-│   ├── CRTBackground.tsx    # WebGL2 animated background shader
-│   ├── MissionCard.tsx      # Mission statement card
-│   ├── ModeToggle.tsx       # GUI / TERM toggle button
-│   ├── Organisms.tsx        # Hero, CTA, Footer
-│   ├── ProjectCard.tsx      # Project cards (featured + regular)
-│   ├── Terminal.tsx         # Terminal UI shell
-│   └── TerminalLine.tsx     # Individual terminal output line renderer
+│   ├── AsciiImage.tsx       # Canvas image → ASCII converter
+│   ├── CRTBackground.tsx    # WebGL2 CRT shader
+│   ├── CrowdFragment.tsx    # Halftone — supplicant crowd
+│   ├── CTA.tsx              # Call-to-action
+│   ├── DeathRider.tsx       # Halftone — horse + skeleton rider
+│   ├── Footer.tsx
+│   ├── GoalCard.tsx         # Goal statement card
+│   ├── Hero.tsx
+│   ├── HudFrame.tsx         # HUD wrapper for DeathRider
+│   ├── MissionCard.tsx
+│   ├── ModeToggle.tsx       # GUI / TERM toggle
+│   ├── ProjectCard.tsx
+│   ├── Terminal.tsx
+│   ├── TerminalLine.tsx
+│   └── icons/
+│       ├── GithubIcon.tsx
+│       └── LinkedinIcon.tsx
+├── constants/
+│   ├── about.ts
+│   ├── projects.ts
+│   └── site.ts
+├── hooks/
+│   └── useHover.ts
 ├── terminal/
-│   ├── ascii.ts             # Banner ASCII art + boot lines
-│   ├── commands.ts          # All CLI commands and their output
-│   ├── types.ts             # Terminal type definitions
-│   └── useTerminal.ts       # Terminal state hook (history, input, autocomplete)
+│   ├── ascii.ts
+│   ├── commands.ts
+│   ├── data.ts
+│   ├── types.ts
+│   └── useTerminal.ts
 ├── types/
-│   └── index.ts             # Shared TypeScript interfaces
-├── App.tsx                  # Root — mode switching, layout, data
-├── index.css                # Design system (CSS vars, animations, grid)
+│   └── index.ts
+├── App.tsx
+├── index.css
 └── main.tsx
 ```
 
 ## Deployment
-
-Automated via GitHub Actions on every push to `main`. The workflow builds with Vite and deploys the `dist/` folder to GitHub Pages.
 
 ```bash
 .github/workflows/deploy.yml  →  build → deploy → pandoraqs.github.io
