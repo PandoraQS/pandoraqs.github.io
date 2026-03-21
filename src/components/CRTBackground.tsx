@@ -1,6 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-// WebGL fragment shader — CRT phosphor glow + scanlines + subtle glitch
+const VERT = `#version 300 es
+precision highp float;
+in vec4 position;
+void main(){ gl_Position = position; }`;
+
 const FRAG = `#version 300 es
 precision highp float;
 out vec4 O;
@@ -16,69 +20,35 @@ float noise(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);return mix(mix(rn
 void main(){
   vec2 uv = FC / R;
   vec2 cuv = uv;
-
-  // --- Subtle CRT barrel distortion ---
   vec2 c = cuv - 0.5;
   float d = dot(c, c);
   cuv = cuv + c * d * 0.04;
-
-  // --- Vignette ---
-  float vign = 1.0 - dot(c, c) * 1.6;
-  vign = clamp(vign, 0.0, 1.0);
-  vign = pow(vign, 0.5);
-
-  // --- Scanlines ---
-  float scanline = sin(cuv.y * R.y * 1.5) * 0.5 + 0.5;
-  scanline = pow(scanline, 1.5) * 0.08 + 0.92;
-
-  // --- Horizontal roll line (very slow) ---
+  float vign = pow(clamp(1.0 - dot(c, c) * 1.6, 0.0, 1.0), 0.5);
+  float scanline = pow(sin(cuv.y * R.y * 1.5) * 0.5 + 0.5, 1.5) * 0.08 + 0.92;
   float rollY = mod(T * 0.04, 1.0);
   float roll = smoothstep(0.002, 0.0, abs(cuv.y - rollY)) * 0.12;
-
-  // --- Phosphor noise (subtle, moving slowly) ---
-  float n = noise(cuv * vec2(R.x / R.y * 3.0, 3.0) + vec2(0.0, T * 0.05));
-  n = n * 0.06;
-
-  // --- Glitch: rare horizontal shift ---
+  float n = noise(cuv * vec2(R.x / R.y * 3.0, 3.0) + vec2(0.0, T * 0.05)) * 0.06;
   float glitchT = floor(T * 0.7);
   float glitchSeed = rnd(vec2(glitchT, 1.0));
   float glitchY = rnd(vec2(glitchT, 2.0));
   float glitchH = 0.004 + rnd(vec2(glitchT, 3.0)) * 0.015;
   float inGlitch = step(abs(cuv.y - glitchY), glitchH) * step(0.93, glitchSeed);
-  float glitchShift = (rnd(vec2(glitchT, 4.0)) - 0.5) * 0.018 * inGlitch;
-  cuv.x += glitchShift;
-
-  // --- Base purple ambient glow from edges ---
+  cuv.x += (rnd(vec2(glitchT, 4.0)) - 0.5) * 0.018 * inGlitch;
   float edgeGlow = 1.0 - vign;
-  vec3 purple = vec3(0.49, 0.23, 0.93); // #7C3AED
+  vec3 purple = vec3(0.49, 0.23, 0.93);
   vec3 col = purple * edgeGlow * 0.18;
-
-  // --- Faint grid lines ---
   float gridX = smoothstep(0.97, 1.0, fract(cuv.x * 24.0));
   float gridY = smoothstep(0.97, 1.0, fract(cuv.y * 14.0));
   col += vec3(gridX + gridY) * purple * 0.07;
-
-  // --- Phosphor bloom: faint vertical smear near center ---
   float bloom = exp(-abs(cuv.x - 0.5) * 12.0) * 0.04;
   col += purple * bloom * (0.5 + n);
-
-  // --- Combine ---
   col += n * purple * 0.3;
   col += roll * purple;
   col *= scanline;
   col *= vign;
-
-  // Fade in on load
-  float fadeIn = min(T * 0.3, 1.0);
-  col *= fadeIn;
-
+  col *= min(T * 0.3, 1.0);
   O = vec4(clamp(col, 0.0, 1.0), 1.0);
 }`;
-
-const VERT = `#version 300 es
-precision highp float;
-in vec4 position;
-void main(){ gl_Position = position; }`;
 
 export default function CRTBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -89,7 +59,6 @@ export default function CRTBackground() {
     const gl = canvas.getContext('webgl2');
     if (!gl) return;
 
-    // compile shader
     const compile = (type: number, src: string) => {
       const s = gl.createShader(type)!;
       gl.shaderSource(s, src);
@@ -97,15 +66,14 @@ export default function CRTBackground() {
       return s;
     };
 
-    const vs = compile(gl.VERTEX_SHADER, VERT);
-    const fs = compile(gl.FRAGMENT_SHADER, FRAG);
     const prog = gl.createProgram()!;
-    gl.attachShader(prog, vs); gl.attachShader(prog, fs);
+    gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
+    gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
     gl.linkProgram(prog);
 
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,1,-1,-1,1,1,1,-1]), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, 1, -1, -1, 1, 1, 1, -1]), gl.STATIC_DRAW);
 
     const pos = gl.getAttribLocation(prog, 'position');
     gl.enableVertexAttribArray(pos);
@@ -145,14 +113,7 @@ export default function CRTBackground() {
   return (
     <canvas
       ref={canvasRef}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        width: '100%',
-        height: '100%',
-        pointerEvents: 'none',
-        zIndex: 0,
-      }}
+      style={{ position: 'fixed', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0 }}
     />
   );
 }

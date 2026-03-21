@@ -1,12 +1,18 @@
-interface Props { mode: 'gui' | 'terminal'; onToggle: () => void; }
+interface Props {
+  mode: 'gui' | 'terminal';
+  onToggle: () => void;
+}
 
 export default function ModeToggle({ mode, onToggle }: Props) {
+  const isTerminal = mode === 'terminal';
+
   return (
-    <button onClick={onToggle}
+    <button
+      onClick={onToggle}
       className="fixed top-4 right-4 z-50 flex items-center gap-2 font-mono text-xs tracking-widest uppercase px-3 py-2 border transition-all duration-200"
       style={{
-        borderColor: mode === 'terminal' ? 'var(--accent-bright)' : 'var(--border-hi)',
-        color: mode === 'terminal' ? 'var(--accent-bright)' : 'var(--text-muted)',
+        borderColor: isTerminal ? 'var(--accent-bright)' : 'var(--border-hi)',
+        color: isTerminal ? 'var(--accent-bright)' : 'var(--text-muted)',
         background: 'var(--surface)',
       }}
       onMouseEnter={e => {
@@ -17,13 +23,14 @@ export default function ModeToggle({ mode, onToggle }: Props) {
       }}
       onMouseLeave={e => {
         const el = e.currentTarget as HTMLElement;
-        el.style.borderColor = mode === 'terminal' ? 'var(--accent-bright)' : 'var(--border-hi)';
-        el.style.color = mode === 'terminal' ? 'var(--accent-bright)' : 'var(--text-muted)';
+        el.style.borderColor = isTerminal ? 'var(--accent-bright)' : 'var(--border-hi)';
+        el.style.color = isTerminal ? 'var(--accent-bright)' : 'var(--text-muted)';
         el.style.boxShadow = 'none';
-      }}>
-      <span style={{ opacity: mode === 'gui' ? 1 : 0.35 }}>GUI</span>
+      }}
+    >
+      <span style={{ opacity: isTerminal ? 0.35 : 1 }}>GUI</span>
       <span style={{ color: 'var(--text-dim)' }}>/</span>
-      <span style={{ opacity: mode === 'terminal' ? 1 : 0.35 }}>TERM</span>
+      <span style={{ opacity: isTerminal ? 1 : 0.35 }}>TERM</span>
     </button>
   );
 }

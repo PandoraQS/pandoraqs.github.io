@@ -5,10 +5,8 @@ import { resolveCommand, commandKeys } from './commands';
 
 const makeId = () => crypto.randomUUID();
 
-const initialHistory: TerminalLine[] = [];
-
 export function useTerminal(onGuiSwitch: () => void) {
-  const [history, setHistory] = useState<TerminalLine[]>(initialHistory);
+  const [history, setHistory] = useState<TerminalLine[]>([]);
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
   const [input, setInput] = useState('');
@@ -51,15 +49,15 @@ export function useTerminal(onGuiSwitch: () => void) {
     }
     if (e.key === 'ArrowUp') {
       e.preventDefault();
-      const newIdx = Math.min(historyIdx + 1, cmdHistory.length - 1);
-      setHistoryIdx(newIdx);
-      setInput(cmdHistory[newIdx] ?? '');
+      const idx = Math.min(historyIdx + 1, cmdHistory.length - 1);
+      setHistoryIdx(idx);
+      setInput(cmdHistory[idx] ?? '');
     }
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      const newIdx = Math.max(historyIdx - 1, -1);
-      setHistoryIdx(newIdx);
-      setInput(newIdx === -1 ? '' : cmdHistory[newIdx]);
+      const idx = Math.max(historyIdx - 1, -1);
+      setHistoryIdx(idx);
+      setInput(idx === -1 ? '' : cmdHistory[idx]);
     }
     if (e.key === 'Tab') {
       e.preventDefault();

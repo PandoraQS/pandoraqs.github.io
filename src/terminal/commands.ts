@@ -1,5 +1,6 @@
 import type { CommandMap, CommandResult, TerminalLine } from './types';
 import { BANNER } from './ascii';
+import { TERMINAL_PROJECTS, QUOTES } from './data';
 
 const line = (content: string, type: TerminalLine['type'] = 'output'): TerminalLine => ({
   id: crypto.randomUUID(),
@@ -10,49 +11,6 @@ const line = (content: string, type: TerminalLine['type'] = 'output'): TerminalL
 const lines = (...args: [string, TerminalLine['type']?][]): CommandResult => ({
   lines: args.map(([c, t]) => line(c, t)),
 });
-
-const PROJECTS = [
-  {
-    id: '1',
-    title: 'INTO-CPS Application',
-    desc: 'Cross-platform desktop app (Electron + React) for co-simulation execution via the Maestro Engine, with live graph rendering and automated CI/CD pipelines.',
-    tags: ['React', 'TypeScript', 'Electron', 'GitHub Actions'],
-    repo: 'https://github.com/INTO-CPS-Association/into-cps-application/',
-    image: '/assets/projects/intocps.png',
-  },
-  {
-    id: '2',
-    title: 'Crypto Arbitrage Stealth Engine',
-    desc: 'High-frequency real-time ETL pipeline monitoring arbitrage opportunities across exchanges via WebSockets, Redis, and Docker microservices.',
-    tags: ['Python', 'Asyncio', 'Redis', 'Docker'],
-    repo: 'https://github.com/PandoraQS/Crypto-Arbitrage-Stealth',
-    image: '/assets/projects/arbitrage.png',
-  },
-  {
-    id: '3',
-    title: 'Sentiment Alpha AI',
-    desc: 'AI pipeline for real-time crypto market narrative tracking. Correlates FinBERT sentiment analysis with live exchange spreads via Llama 3.',
-    tags: ['NLP', 'PyTorch', 'Llama 3', 'FinBERT'],
-    repo: 'https://github.com/PandoraQS/News-Sentiment-Alpha',
-    image: '/assets/projects/sentiment.png',
-  },
-  {
-    id: '4',
-    title: 'Behavioral Analytics Platform',
-    desc: 'End-to-end data engineering project processing complex clickstream patterns to identify user anomalies and risk insights.',
-    tags: ['Pandas', 'SQL', 'Pydantic', 'ETL'],
-    repo: 'https://github.com/PandoraQS/ecommerce-behavior-analytics',
-    image: '/assets/projects/analytics.png',
-  },
-  {
-    id: '5',
-    title: 'Aarhus Terrain Engine',
-    desc: 'High-performance GIS web app mapping and analyzing Aarhus green infrastructure for flood risk and urban water management.',
-    tags: ['React', 'TypeScript', 'OpenLayers', 'Overpass API'],
-    repo: 'https://github.com/PandoraQS/terrain-aarhus-demo/',
-    image: '/assets/projects/terrain-engine.png',
-  },
-];
 
 export const commands: CommandMap = {
 
@@ -129,7 +87,7 @@ export const commands: CommandMap = {
       line(''),
       line('  ── FEATURED PROJECTS ──────────────────────────────', 'info'),
       line(''),
-      ...PROJECTS.flatMap(p => [
+      ...TERMINAL_PROJECTS.flatMap(p => [
         line(`  [${p.id}]  ${p.title}`, 'success'),
         line(`        ${p.desc}`, 'output'),
         line(`        Tags: ${p.tags.join(' · ')}`, 'info'),
@@ -137,7 +95,7 @@ export const commands: CommandMap = {
         line(''),
       ]),
       line('  Type "project <id>" for details and ASCII preview.', 'info'),
-    ]
+    ],
   }),
 
   mission: () => lines(
@@ -147,7 +105,7 @@ export const commands: CommandMap = {
     ['   background to build systems that are fast, reliable,', 'success'],
     ['   and genuinely useful."', 'success'],
     [''],
-    ['  I don\'t just write code: I design systems.', 'output'],
+    ["  I don't just write code: I design systems.", 'output'],
     ['  Every architectural decision is a design choice.', 'output'],
     [''],
   ),
@@ -166,18 +124,11 @@ export const commands: CommandMap = {
       line('  💼  LinkedIn  linkedin.com/in/simone-micalizzi', 'success'),
       line('      [click] https://linkedin.com/in/simone-micalizzi', 'link'),
       line(''),
-    ]
+    ],
   }),
 
   quote: () => {
-    const quotes = [
-      { text: '"Simplicity is a prerequisite for reliability."', author: '— Edsger W. Dijkstra' },
-      { text: '"Make it work, make it right, make it fast."', author: '— Kent Beck' },
-      { text: '"The best code is no code at all."', author: '— Jeff Atwood' },
-      { text: '"First, solve the problem. Then, write the code."', author: '— John Johnson' },
-      { text: '"Any fool can write code that a computer can understand."', author: '— Martin Fowler' },
-    ];
-    const q = quotes[Math.floor(Math.random() * quotes.length)];
+    const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
     return lines(
       [''],
       [`  ${q.text}`, 'success'],
@@ -187,7 +138,7 @@ export const commands: CommandMap = {
   },
 
   banner: () => ({
-    lines: [{ id: crypto.randomUUID(), type: 'ascii', content: BANNER }]
+    lines: [{ id: crypto.randomUUID(), type: 'ascii', content: BANNER }],
   }),
 
   clear: () => ({ lines: [] }),
@@ -199,12 +150,9 @@ export function resolveCommand(input: string): CommandResult {
   const [cmd, ...args] = input.trim().toLowerCase().split(/\s+/);
 
   if (cmd === 'project' && args[0]) {
-    const id = args[0];
-    const p = PROJECTS.find(pr => pr.id === id);
+    const p = TERMINAL_PROJECTS.find(pr => pr.id === args[0]);
     if (!p) {
-      return lines(
-        [`  Project "${id}" not found. Type "projects" for the full list.`, 'error']
-      );
+      return lines([`  Project "${args[0]}" not found. Type "projects" for the full list.`, 'error']);
     }
     return {
       lines: [
@@ -218,17 +166,13 @@ export function resolveCommand(input: string): CommandResult {
         line(`  Tags:  ${p.tags.join(' · ')}`, 'info'),
         line(`  Repo:  ${p.repo}`, 'link'),
         line(''),
-      ]
+      ],
     };
   }
 
-  if (commands[cmd]) {
-    return commands[cmd]();
-  }
+  if (commands[cmd]) return commands[cmd]();
 
-  return lines(
-    [`  Command not found: "${input}". Type "help".`, 'error']
-  );
+  return lines([`  Command not found: "${input}". Type "help".`, 'error']);
 }
 
 export const commandKeys = Object.keys(commands);
