@@ -26,19 +26,6 @@ export default function DeathRider({ className }: { className?: string }) {
     let animId: number;
     const dots: Dot[] = [];
     let frame = 0;
-    let mouseX = -999, mouseY = -999;
-    let isHover = false;
-
-    const onMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseX = (e.clientX - rect.left) * (CW / rect.width);
-      mouseY = (e.clientY - rect.top)  * (CH / rect.height);
-    };
-    const onEnter = () => { isHover = true; };
-    const onLeave = () => { isHover = false; mouseX = -999; mouseY = -999; };
-    canvas.addEventListener('mousemove', onMove);
-    canvas.addEventListener('mouseenter', onEnter);
-    canvas.addEventListener('mouseleave', onLeave);
 
     // ── Glitch state ──
     let glitchTimer = 0;
@@ -144,18 +131,6 @@ export default function DeathRider({ className }: { className?: string }) {
         ctx.fill();
       }
 
-      // ── Hover glow ──
-      if (isHover && mouseX > 0) {
-        const g = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 55);
-        g.addColorStop(0,   'rgba(124,58,237,0.20)');
-        g.addColorStop(0.5, 'rgba(124,58,237,0.07)');
-        g.addColorStop(1,   'rgba(124,58,237,0)');
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(mouseX, mouseY, 55, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
       // ── Dots ──
       for (const d of dots) {
         // ── Gallop displacement per dot based on position in figure ──
@@ -239,20 +214,8 @@ export default function DeathRider({ className }: { className?: string }) {
           }
         }
 
-        // Hover colour
-        const hdist = Math.sqrt((drawX - mouseX)**2 + (drawY - mouseY)**2);
-        let dotColor: string;
-        if (isHover && hdist < 55) {
-          const s = 1 - hdist / 55;
-          const rv = Math.round(196 - s * 72);
-          const gv = Math.round(190 - s * 132);
-          const bv = Math.round(221 + s * 16);
-          dotColor = `rgba(${rv},${gv},${bv},${(0.7 + s * 0.3).toFixed(2)})`;
-          r *= (1 + s * 0.3);
-        } else {
-          const v = Math.round(110 + (d.baseR / MAX_R) * 110);
-          dotColor = `rgb(${v},${v},${v})`;
-        }
+        const v = Math.round(110 + (d.baseR / MAX_R) * 110);
+        const dotColor = `rgb(${v},${v},${v})`;
 
         ctx.fillStyle = dotColor;
         ctx.beginPath();
@@ -271,9 +234,6 @@ export default function DeathRider({ className }: { className?: string }) {
 
     return () => {
       cancelAnimationFrame(animId);
-      canvas.removeEventListener('mousemove', onMove);
-      canvas.removeEventListener('mouseenter', onEnter);
-      canvas.removeEventListener('mouseleave', onLeave);
     };
   }, []);
 
@@ -281,7 +241,7 @@ export default function DeathRider({ className }: { className?: string }) {
     <canvas
       ref={canvasRef}
       className={className}
-      style={{ display: 'block', width: '100%', height: '100%', cursor: 'crosshair' }}
+      style={{ display: 'block', width: '100%', height: '100%' }}
     />
   );
 }

@@ -1,5 +1,5 @@
 import DeathRider from './DeathRider';
-import CrowdFragment from './CrowdFragment';
+import Afflicted from './Afflicted';
 import GoalCard from './GoalCard';
 
 function HudLabel({ top, bottom, left, right, children }: {
@@ -64,7 +64,7 @@ export default function FrescoMosaic() {
             className="absolute top-0 bottom-0 -right-3"
             style={{ borderRight: '1px solid var(--border)', opacity: 0.3 }}
           />
-          <CrowdFragment className="w-full h-full" />
+          <Afflicted className="w-full h-full" />
           <StatusBar left="CROWD_FRAG" right="HALFTONE" />
         </div>
 

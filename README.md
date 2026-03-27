@@ -57,7 +57,7 @@ The site's visual identity is grounded in the **Trionfo della Morte** fresco (14
 | Fragment | Section | Component |
 | --- | --- | --- |
 | Horse + skeleton rider | Hero | `DeathRider.tsx` |
-| Supplicant crowd | Between Hero and About | `CrowdFragment.tsx` |
+| Supplicant crowd | Between Hero and About | `Afflicted.tsx` |
 | *(more planned)* | *(future sections)* | — |
 
 Each fragment is a live canvas with breathing dots, pulse radiale, glitch slice, and hover violet glow.
@@ -101,7 +101,7 @@ src/
 │   ├── AboutCard.tsx        # About section cards
 │   ├── AsciiImage.tsx       # Canvas image → ASCII converter
 │   ├── CRTBackground.tsx    # WebGL2 CRT shader
-│   ├── CrowdFragment.tsx    # Halftone — supplicant crowd
+│   ├── Afflicted.tsx        # Halftone — supplicant crowd
 │   ├── CTA.tsx              # Call-to-action
 │   ├── DeathRider.tsx       # Halftone — horse + skeleton rider
 │   ├── Footer.tsx

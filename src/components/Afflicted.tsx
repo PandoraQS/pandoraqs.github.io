@@ -12,7 +12,7 @@ interface Dot {
   baseR: number; phase: number;
 }
 
-export default function CrowdFragment({ className }: { className?: string }) {
+export default function Afflicted({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -26,19 +26,6 @@ export default function CrowdFragment({ className }: { className?: string }) {
     let animId: number;
     const dots: Dot[] = [];
     let frame = 0;
-    let mouseX = -999, mouseY = -999;
-    let isHover = false;
-
-    const onMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseX = (e.clientX - rect.left) * (CW / rect.width);
-      mouseY = (e.clientY - rect.top)  * (CH / rect.height);
-    };
-    const onEnter = () => { isHover = true; };
-    const onLeave = () => { isHover = false; mouseX = -999; mouseY = -999; };
-    canvas.addEventListener('mousemove', onMove);
-    canvas.addEventListener('mouseenter', onEnter);
-    canvas.addEventListener('mouseleave', onLeave);
 
     let pulses: Array<{ r: number; alpha: number }> = [];
     let nextPulse = 300 + Math.floor(Math.random() * 180);
@@ -107,16 +94,6 @@ export default function CrowdFragment({ className }: { className?: string }) {
         ctx.fill();
       }
 
-      if (isHover && mouseX > 0) {
-        const g = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 50);
-        g.addColorStop(0, 'rgba(124,58,237,0.18)');
-        g.addColorStop(1, 'rgba(124,58,237,0)');
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(mouseX, mouseY, 50, 0, Math.PI*2);
-        ctx.fill();
-      }
-
       for (const d of dots) {
         let r = d.baseR * (1 + 0.04 * Math.sin(t * 1.3 + d.phase));
 
@@ -126,16 +103,8 @@ export default function CrowdFragment({ className }: { className?: string }) {
           if (wave < 18) r *= 1 + (1 - wave/18) * 0.45 * p.alpha * 1.8;
         }
 
-        const hdist = Math.sqrt((d.x - mouseX)**2 + (d.y - mouseY)**2);
-        let dotColor: string;
-        if (isHover && hdist < 50) {
-          const s = 1 - hdist / 50;
-          dotColor = `rgba(${Math.round(196-s*72)},${Math.round(190-s*132)},${Math.round(221+s*16)},${(0.7+s*0.3).toFixed(2)})`;
-          r *= (1 + s * 0.3);
-        } else {
-          const v = Math.round(100 + (d.baseR / MAX_R) * 120);
-          dotColor = `rgb(${v},${v},${v})`;
-        }
+        const v = Math.round(100 + (d.baseR / MAX_R) * 120);
+        const dotColor = `rgb(${v},${v},${v})`;
 
         ctx.fillStyle = dotColor;
         ctx.beginPath();
@@ -148,9 +117,6 @@ export default function CrowdFragment({ className }: { className?: string }) {
 
     return () => {
       cancelAnimationFrame(animId);
-      canvas.removeEventListener('mousemove', onMove);
-      canvas.removeEventListener('mouseenter', onEnter);
-      canvas.removeEventListener('mouseleave', onLeave);
     };
   }, []);
 
@@ -158,7 +124,7 @@ export default function CrowdFragment({ className }: { className?: string }) {
     <canvas
       ref={canvasRef}
       className={className}
-      style={{ display: 'block', width: '100%', height: '100%', cursor: 'crosshair' }}
+      style={{ display: 'block', width: '100%', height: '100%' }}
     />
   );
 }

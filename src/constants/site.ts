@@ -20,8 +20,16 @@ export const QUOTES = {
 } as const;
 
 export const HUD = {
-  title: 'TRIONFO DELLA MORTE · 1446',
+  title: 'IL TRIONFO DELLA MORTE · 1446',
+  titleEn: 'THE TRIUMPH OF DEATH · 1446',
   location: 'PALERMO · SICILIA',
   label: 'DEATH_RIDER',
+  mode: 'HALFTONE_MODE',
+} as const;
+
+export const AFFLICTED = {
+  title: 'GLI AFFLITTI',
+  titleEn: 'THE AFFLICTED',
+  label: 'AFFLICTED',
   mode: 'HALFTONE_MODE',
 } as const;

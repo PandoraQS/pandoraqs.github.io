@@ -6,7 +6,7 @@ import AboutCard from './components/AboutCard';
 import MissionCard from './components/MissionCard';
 import ProjectCard from './components/ProjectCard';
 import GoalCard from './components/GoalCard';
-import CrowdFragment from './components/CrowdFragment';
+import AfflictedFrame from './components/AfflictedFrame';
 import Terminal from './components/Terminal';
 import ModeToggle from './components/ModeToggle';
 import CRTBackground from './components/CRTBackground';
@@ -60,32 +60,7 @@ function FrescoStrip() {
       <PageWidth>
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 items-start">
 
-          <div className="relative shrink-0 flex justify-center lg:block">
-            <div className="relative" style={{ width: 'min(160px, 40vw)', height: 'min(457px, 114vw)' }}>
-              <div className="absolute -top-2 -left-2 w-4 h-4 border-t-2 border-l-2" style={{ borderColor: 'var(--accent-bright)' }} />
-              <div className="absolute -bottom-2 -right-2 w-4 h-4 border-b-2 border-r-2" style={{ borderColor: 'var(--accent-bright)' }} />
-              <div
-                className="absolute -top-5 left-0 font-mono tracking-widest"
-                style={{ color: 'var(--text-dim)', letterSpacing: '0.18em', fontSize: '9px' }}
-              >
-                SUPPLICANTI · 1446
-              </div>
-              <div
-                className="absolute -bottom-5 right-0 font-mono tracking-widest"
-                style={{ color: 'var(--text-dim)', letterSpacing: '0.18em', fontSize: '9px' }}
-              >
-                FOLLA
-              </div>
-              <CrowdFragment className="w-full h-full" />
-              <div
-                className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-2 py-1"
-                style={{ background: 'rgba(9,9,15,0.7)', borderTop: '1px solid var(--border-hi)' }}
-              >
-                <span className="font-mono tracking-widest" style={{ color: 'var(--text-dim)', fontSize: '9px' }}>CROWD_FRAG</span>
-                <span className="font-mono tracking-widest" style={{ color: 'var(--accent-bright)', fontSize: '9px' }}>HALFTONE_MODE</span>
-              </div>
-            </div>
-          </div>
+          <AfflictedFrame />
 
           <div className="flex-1 flex flex-col gap-4 justify-center" style={{ paddingTop: '1rem' }}>
             <div
@@ -96,7 +71,7 @@ function FrescoStrip() {
             </div>
             <GoalCard />
             <p className="font-mono text-xs" style={{ color: 'var(--text-dim)', lineHeight: 1.7 }}>
-              The supplicants in the fresco implore Death — the engineer implores the system.<br />
+              The afflicted figures in the fresco implore Death — the engineer implores the system.<br />
               Both know the answer depends entirely on the architecture.
             </p>
           </div>
