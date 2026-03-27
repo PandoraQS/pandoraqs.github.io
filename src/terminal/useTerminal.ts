@@ -2,6 +2,7 @@ import { useState, useCallback, useRef } from 'react';
 import type { TerminalLine } from './types';
 import { PROMPT } from './ascii';
 import { resolveCommand, commandKeys } from './commands';
+import { SORT_ALGOS } from './sorting';
 
 const makeId = () => crypto.randomUUID();
 
@@ -61,8 +62,38 @@ export function useTerminal(onGuiSwitch: () => void) {
     }
     if (e.key === 'Tab') {
       e.preventDefault();
-      const match = commandKeys.find(k => k.startsWith(input));
-      if (match) setInput(match);
+
+      const normalized = input.trim();
+      if (!normalized) return;
+
+      const parts = normalized.split(/\s+/);
+      const root = parts[0];
+
+      if (parts.length === 1) {
+        const match = commandKeys.find(k => k.startsWith(root));
+        if (match) setInput(match);
+        return;
+      }
+
+      if (root === 'sort') {
+        const args = parts.slice(1);
+        const maybeAlgo = args[0] ?? '';
+
+        if (maybeAlgo && !SORT_ALGOS.includes(maybeAlgo as (typeof SORT_ALGOS)[number])) {
+          const algoMatch = SORT_ALGOS.find(a => a.startsWith(maybeAlgo));
+          if (algoMatch) {
+            setInput(['sort', algoMatch, ...args.slice(1)].join(' '));
+            return;
+          }
+        }
+
+        const lastArg = args[args.length - 1] ?? '';
+        const hasExpand = args.includes('expand');
+
+        if (!hasExpand && lastArg && 'expand'.startsWith(lastArg)) {
+          setInput(['sort', ...args.slice(0, -1), 'expand'].join(' '));
+        }
+      }
     }
   };
 
