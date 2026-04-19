@@ -9,7 +9,6 @@ import GoalCard from './components/GoalCard';
 import AfflictedFrame from './components/AfflictedFrame';
 import Terminal from './components/Terminal';
 import ModeToggle from './components/ModeToggle';
-import CRTBackground from './components/CRTBackground';
 import { PROJECTS } from './constants/projects';
 import { ABOUT_CARDS } from './constants/about';
 import { QUOTES, SITE } from './constants/site';
@@ -140,7 +139,6 @@ export default function App() {
         <Terminal onGuiSwitch={() => setMode('gui')} />
       ) : (
         <div style={{ background: 'var(--bg)', minHeight: '100vh', position: 'relative' }}>
-          <CRTBackground />
           <Hero onTerminalSwitch={() => setMode('terminal')} />
 
           <FrescoStrip />

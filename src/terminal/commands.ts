@@ -14,6 +14,8 @@ const lines = (...args: [string, TerminalLine['type']?][]): CommandResult => ({
   lines: args.map(([c, t]) => line(c, t)),
 });
 
+let ctfStage = 0;
+
 export const commands: CommandMap = {
 
   help: () => lines(
@@ -33,7 +35,7 @@ export const commands: CommandMap = {
     ['  quote        → Random dev quote', 'success'],
     ['  banner       → Show ASCII art', 'success'],
     ['  clear        → Clear the terminal', 'success'],
-    ['  gui          → Switch to visual portfolio', 'success'],
+    ['  ctf          → [ RESTRICTED ]', 'error'],
     [''],
     ['  Use ↑ ↓ to navigate command history.', 'info'],
     ['  Use TAB to autocomplete.', 'info'],
@@ -151,13 +153,13 @@ export const commands: CommandMap = {
       line(''),
       line('  ── CONTACTS & SOCIALS ──────────────────────────────', 'info'),
       line(''),
-      line('  📧  Email     simonemicalizzi@pm.me', 'success'),
+      line('       Email     simonemicalizzi@pm.me', 'success'),
       line('      [click] mailto:simonemicalizzi@pm.me', 'link'),
       line(''),
-      line('  🐙  GitHub    github.com/PandoraQS', 'success'),
+      line('      GitHub    github.com/PandoraQS', 'success'),
       line('      [click] https://github.com/PandoraQS', 'link'),
       line(''),
-      line('  💼  LinkedIn  linkedin.com/in/simone-micalizzi', 'success'),
+      line('      LinkedIn  linkedin.com/in/simone-micalizzi', 'success'),
       line('      [click] https://linkedin.com/in/simone-micalizzi', 'link'),
       line(''),
     ],
@@ -177,10 +179,127 @@ export const commands: CommandMap = {
     lines: [{ id: crypto.randomUUID(), type: 'ascii', content: BANNER }],
   }),
 
+  // ── CTF ────────────────────────────────────────────────────────────────
+  ctf: () => {
+    ctfStage = 1;
+    return lines(
+      [''],
+      ['  [SYS] Initializing restricted session...', 'error'],
+      ['  [SYS] Clearance level: UNKNOWN', 'error'],
+      ['  [SYS] Anomaly detected in /var/log/audit.log', 'error'],
+      [''],
+      ['  A flag has been staged somewhere in this environment.', 'info'],
+      ['  Recover it.', 'info'],
+      [''],
+      ['  /home/visitor/ contains:', 'output'],
+      ['    readme.txt    audit.log    .shadow', 'output'],
+      [''],
+      ['  Type  cat <filename>  to inspect a file.', 'info'],
+      [''],
+    );
+  },
+
+  unlock: () => {
+    if (ctfStage < 2) {
+      return lines(
+        ['  [ERR] unlock: no active session. Run ctf first.', 'error'],
+      );
+    }
+    ctfStage = 3;
+    return lines(
+      [''],
+      ['  [SYS] Decrypting .shadow...', 'info'],
+      ['  [SYS] Layer 1: ROT13 — done', 'output'],
+      ['  [SYS] Layer 2: awaiting passphrase', 'output'],
+      [''],
+      ['  Recovered fragment:', 'output'],
+      ['  cnaqben', 'error'],
+      [''],
+      ['  Submit:  flag <passphrase>', 'info'],
+      [''],
+    );
+  },
+
   clear: () => ({ lines: [] }),
 
   gui: () => ({ lines: [] }),
 };
+
+// ── CTF file system ─────────────────────────────────────────────────────
+
+function handleCat(filename: string): CommandResult {
+  if (ctfStage < 1) {
+    return lines(['  [ERR] ls: permission denied.', 'error']);
+  }
+
+  if (filename === 'readme.txt') {
+    return lines(
+      [''],
+      ['  ── readme.txt ───────────────────────────────────', 'info'],
+      ['  This system has been flagged for a security audit.', 'output'],
+      ['  An access token was embedded by the previous operator.', 'output'],
+      ['  It was encoded and split across two files.', 'output'],
+      [''],
+      ['  audit.log contains the first clue.', 'output'],
+      ['  .shadow is locked. Find the key first.', 'output'],
+      [''],
+    );
+  }
+
+  if (filename === 'audit.log') {
+    ctfStage = Math.max(ctfStage, 2);
+    return lines(
+      [''],
+      ['  ── audit.log ────────────────────────────────────', 'info'],
+      ['  [2026-04-17 03:12:41] session opened for user visitor', 'output'],
+      ['  [2026-04-17 03:12:55] file .shadow written — encrypted', 'output'],
+      ['  [2026-04-17 03:13:02] encoded key stored in log header', 'output'],
+      ['  [2026-04-17 03:13:02] key: dW5sb2Nr', 'error'],
+      ['  [2026-04-17 03:13:09] session closed', 'output'],
+      [''],
+    );
+  }
+
+  if (filename === '.shadow') {
+    if (ctfStage < 2) {
+      return lines(
+        ['  [ERR] .shadow: permission denied. Find the key first.', 'error'],
+      );
+    }
+    return lines(
+      ['  [ERR] .shadow: still encrypted. Run: unlock', 'error'],
+    );
+  }
+
+  return lines([`  [ERR] ls: ${filename}: no such file.`, 'error']);
+}
+
+function handleFlag(answer: string | undefined): CommandResult {
+  if (ctfStage < 3) {
+    return lines(
+      ['  [ERR] flag: no active challenge. Run ctf to begin.', 'error'],
+    );
+  }
+  if (answer === 'pandora') {
+    ctfStage = 4;
+    return lines(
+      [''],
+      ['  [SYS] Verifying passphrase...', 'info'],
+      ['  [SYS] Passphrase accepted.', 'success'],
+      [''],
+      ['  FLAG{p4nd0r4_w4s_h3r3}', 'success'],
+      [''],
+      ['  /var/log/audit.log — case closed.', 'info'],
+      [''],
+    );
+  }
+  return lines(
+    ['  [ERR] flag: wrong passphrase.', 'error'],
+    ['  [SYS] Hint: the fragment in .shadow is ROT13-encoded.', 'info'],
+  );
+}
+
+// ── Resolver ────────────────────────────────────────────────────────────
 
 export function resolveCommand(input: string): CommandResult {
   const [cmd, ...args] = input.trim().toLowerCase().split(/\s+/);
@@ -235,6 +354,10 @@ export function resolveCommand(input: string): CommandResult {
     return { lines: outputLines };
   }
 
+  if (cmd === 'cat' && args[0]) return handleCat(args[0]);
+
+  if (cmd === 'flag') return handleFlag(args[0]?.toLowerCase());
+
   if (cmd === 'project' && args[0]) {
     const p = TERMINAL_PROJECTS.find(pr => pr.id === args[0]);
     if (!p) {
@@ -261,4 +384,4 @@ export function resolveCommand(input: string): CommandResult {
   return lines([`  Command not found: "${input}". Type "help".`, 'error']);
 }
 
-export const commandKeys = [...Object.keys(commands), 'sort', 'project'];
+export const commandKeys = [...Object.keys(commands), 'sort', 'project', 'cat', 'flag', 'unlock'];
